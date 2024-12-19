@@ -131,7 +131,7 @@ async function updateDataById(bookId,dataToBeUpdated){
     try {
      const updatedData=await BooksModel.findByIdAndUpdate(bookId,dataToBeUpdated,{new:true}) 
      return updatedData
-     return  
+    
     } catch (error) {
         throw error
     }
@@ -167,6 +167,26 @@ res.status(201).json({message:"Data updated Successfully",updatedData})
     } catch (error) {
         res.status(500).json({error:"Failed to update data"})
     }
+})
+async function deleteBookById(bookId){
+    try {
+      const deletedData=await BooksModel.findByIdAndDelete(bookId) 
+      return deletedData 
+    } catch (error) {
+        throw error
+    }
+}
+app.delete("/books/:bookId",async(req,res)=>{
+try {
+  const deletedData=await deleteBookById(req.params.bookId)  
+  if(deletedData){
+    res.status(201).json({message:"Data Deleted Successfully",deletedData})
+  }else{
+    res.status(404).json({error:"Data not Found."})
+  }
+} catch (error) {
+    res.status(500).json({error:"Failed to delete the data"})
+}
 })
 app.listen(PORT,()=>{
     console.log("App is running on port ",PORT)
