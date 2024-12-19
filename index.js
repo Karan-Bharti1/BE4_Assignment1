@@ -1,13 +1,15 @@
 const {initializerDatabase}=require('./database/db.connection')
 initializerDatabase()
-
-const BooksModel=require("./books.models")
 const express=require('express')
 const app=express()
-const PORT=process.env.PORT||3000
 const cors=require('cors')
 app.use(cors())
 app.use(express.json())
+const BooksModel=require("./books.models")
+
+const PORT=process.env.PORT||3000
+
+
 async function createBookData(newBook){
     try {
       const book=new BooksModel(newBook)  
@@ -35,7 +37,7 @@ return books
         throw error
     }
 }
-app.get("/books",async(req,res)=>{
+app.get("/",async(req,res)=>{
     try {
      const books=await readAllBooks() 
      if(books.length!=0){
