@@ -27,6 +27,26 @@ app.post("/books",async(req,res)=>{
       res.status(500).json({error:"Failed to create new Data"})  
     }
 })
+async function readAllBooks(){
+    try {
+        const books= await BooksModel.find()
+return books
+    } catch (error) {
+        throw error
+    }
+}
+app.get("/books",async(req,res)=>{
+    try {
+     const books=await readAllBooks() 
+     if(books.length!=0){
+        res.status(201).json(books)
+     }  else{
+        res.status(404).json({error:"Book Data Not Found"})
+     }
+    } catch (error) {
+        res.status(500).json({error:"Failed to fetch books data."})
+    }
+})
 app.listen(PORT,()=>{
     console.log("App is running on port ",PORT)
 })
