@@ -148,6 +148,26 @@ res.status(201).json({message:"Data updated Successfully",updatedData})
         res.status(500).json({error:"Failed to update data"})
     }
 })
+async function findDataByTitleAndUpdateIt(bookTitle,dataToBeUpdated){
+    try {
+    const updatedData=await BooksModel.findOneAndUpdate({title:bookTitle},dataToBeUpdated,{new:true}) 
+    return updatedData   
+    } catch (error) {
+        throw error
+    }
+}
+app.post("/books/title/:bookTitle",async(req,res)=>{
+    try {
+       const updatedData= await findDataByTitleAndUpdateIt(req.params.bookTitle,req.body)
+       if(updatedData){
+res.status(201).json({message:"Data updated Successfully",updatedData})
+       }else{
+        res.status(404).json({error:"Data Not Found"})
+       }
+    } catch (error) {
+        res.status(500).json({error:"Failed to update data"})
+    }
+})
 app.listen(PORT,()=>{
     console.log("App is running on port ",PORT)
 })
